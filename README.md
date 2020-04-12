@@ -1,0 +1,1 @@
+App thêm câu hỏi. Dùng javascipt thuần. Databse cơ bản tren firebase

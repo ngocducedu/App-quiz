@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+    
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/7.10.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.10.0/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.10.0/firebase-database.js"></script>
+    <script defer src="/__/firebase/7.10.0/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/7.10.0/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.10.0/firebase-storage.js"></script>
+
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+    
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+
+        body {
+            background-color: #e0afb8;
+            background-image: url("https://scontent.fhph1-1.fna.fbcdn.net/v/t1.0-9/s960x960/92320865_659446564599469_7105216839323484160_o.jpg?_nc_cat=102&_nc_sid=dd9801&_nc_oc=AQlzPz-7PJ3AikNWA-nPtrIB5Egg4Nz2MGJVwori_OLXZN16fA_6Ug37JoWyhf6I5h4&_nc_ht=scontent.fhph1-1.fna&_nc_tp=7&oh=86e0bf1d73d613bf8ffec8711b6196bd&oe=5EB73943");
+
+            color: #65839e;
+        }
+
+        .wrapper {
+            width: 80%;
+            text-align: center;
+            border-radius: 4px;
+            margin: 20px auto 20px auto;
+            padding: 5px;
+            background-color: #f2e3f2;
+            border: 1px solid #CCCCCC;
+        }
+
+        .input {
+            display: flex;
+            text-align: center;
+            width: 80%;
+            border-radius: 4px;
+            border: 1px solid #2c4526;
+            margin: 10px ;
+            padding: 5px;
+        }
+
+        #questionScreen {
+            display: none;
+        }
+
+        #startBtn {
+            display: block;
+            border: 1px solid #2c4526;
+            padding: 10px 30px;
+            border-radius: 3px;
+            margin: 100px auto;
+        }
+
+        .question {
+            display: flex; justify-content: space-around;
+            width: 80%;
+            text-align: center;
+            border-radius: 4px;
+            border: 1px solid #2c4526;
+            margin: 100px auto 50px auto;
+            padding: 5px;
+        }
+
+        .answers {
+            width: 80%;
+            margin: 0 auto 20px auto;
+        }
+
+        .answers > div{
+            border: 1px solid #2c4526;
+            text-align: center;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            color: #041f50;
+            padding: 5px;
+        }
+
+        #add-btn-question {
+          display: block;
+          text-align: center;
+            margin: 10px auto 10px auto;
+            border-radius: 3px;
+            color: #041f50;
+            padding: 5px;
+        }
+
+        .foot {
+          background-color: #e0afb8;
+          text-align: center; 
+        }
+
+        #score {
+          display: none;
+        }
+
+    </style>
+  </head>
+  <body>
+    <script>
+      let score = 0;
+      let numAnswer = 0;
+      function getResult(x,y,z) {
+        console.log('x = '+ x + ' y = ' + y + ' z = ' + z ) 
+        numAnswer++; 
+        document.getElementById(x).style.backgroundColor = 'rgb(227, 169, 169)';
+        if (z == '1') {
+          document.getElementById(x.slice(0, -1) + '2').style.display = 'none';
+        } else {
+          document.getElementById(x.slice(0, -1) + '1').style.display = 'none';
+        }
+        if(y==z)
+          score++;
+        var numberQues = parseInt(document.getElementById("numQues").textContent);
+
+        if (numAnswer == numberQues) {
+          document.getElementById('scores').style.display = 'block';
+          document.getElementById('scores').innerHTML = '<h1>Bạn trả lời đúng ' + score*100/numberQues +' % Các bạn thật là hiểu nhau ^^</h1>';
+        }
+        console.log('so diem cua ban la :' + score*100/numberQues);
+      }
+      function selectOnlyThis(id) {
+          for (var i = 1;i <= 2; i++)
+          {
+              document.getElementById("check"+i).checked = false;
+          }
+          document.getElementById(id).checked = true;
+      }
+    </script>
+
+    <div class="wrapper" id="input-box">
+      <h1>Ai hiểu bạn nhất</h1>
+
+      <input class="input" id="new-item-question" type="text" placeholder="Nhập câu hỏi">
+      <div class="input">
+        <input style="width: 70%" id="new-item-option1" type="text" placeholder="Nhập đáp án 1"><input type="checkbox" id="check1" value="Value1" onclick="selectOnlyThis(this.id)" />
+        <label> Tích nếu đáp án đúng</label><br>
+      </div>
+      
+      <div class="input">
+        <input style="width: 70%"  id="new-item-option2" type="text" placeholder="Nhập đáp án 2"><input type="checkbox" id="check2" value="Value1" onclick="selectOnlyThis(this.id)" />
+        <label> Tích nếu đáp án đúng</label><br>
+      </div>
+      
+        <button type="button" id='add-btn-question'>Thêm câu hỏi và đáp án</button>
+
+      <p>Bạn đã thêm <label id="numQues"></label> câu hỏi</p>
+
+      <button type="button" id='delete-btn-question'>Xoá toàn bộ câu hỏi đã thêm</button>
+ 
+    </div>
+
+
+    <div class="wrapper">
+      <div id="welcomeScreen">
+          <button id="startBtn">Bắt đầu trả lời</button>
+      </div>
+
+      <div id="questionScreen">       
+      </div>
+
+      <div id='scores'><h1></h1></div>
+    </div>
+
+
+    <div class="foot">
+      <p class="col-title"> Dev Ngọc Đức </p>
+      
+      <div class="clearfix">
+      <a rel="nofollow" href="https://www.messenger.com/t/nhungocdoan39" title="Xem chi tiết" target="_blank" class="btn-messenger-lightbox"><span class="messenger-icon"></span>
+      <svg width="25" height="25" viewBox="0 0 12 12">
+      <path d="M2.185,12.001 C2.522,11.817 2.845,11.639 3.154,11.468 C3.463,11.298 3.772,11.134 4.081,10.977 C4.147,10.940 4.226,10.914 4.320,10.900 C4.414,10.887 4.503,10.889 4.587,10.907 C5.261,11.046 5.926,11.085 6.582,11.025 C7.237,10.965 7.884,10.801 8.521,10.533 C9.410,10.155 10.136,9.626 10.698,8.948 C11.260,8.269 11.640,7.533 11.836,6.739 C12.033,5.945 12.033,5.132 11.836,4.301 C11.640,3.470 11.223,2.709 10.586,2.016 C10.155,1.545 9.694,1.157 9.202,0.853 C8.710,0.548 8.195,0.324 7.657,0.181 C7.118,0.038 6.561,-0.024 5.985,-0.006 C5.409,0.013 4.812,0.110 4.194,0.285 C3.669,0.433 3.184,0.629 2.740,0.873 C2.295,1.118 1.901,1.411 1.559,1.753 C1.217,2.095 0.927,2.485 0.688,2.923 C0.450,3.362 0.269,3.849 0.148,4.384 C0.026,4.920 -0.021,5.428 0.007,5.908 C0.035,6.388 0.129,6.847 0.288,7.286 C0.447,7.724 0.674,8.142 0.969,8.539 C1.264,8.936 1.613,9.315 2.016,9.675 C2.063,9.712 2.103,9.767 2.135,9.841 C2.168,9.915 2.185,9.979 2.185,10.035 C2.194,10.358 2.196,10.679 2.192,10.997 C2.187,11.316 2.185,11.651 2.185,12.001 L2.185,12.001 ZM5.304,4.107 C5.585,4.357 5.861,4.604 6.132,4.848 C6.404,5.093 6.685,5.345 6.975,5.603 C7.415,5.363 7.865,5.118 8.324,4.869 C8.783,4.620 9.246,4.370 9.715,4.121 C9.724,4.130 9.731,4.137 9.736,4.142 C9.741,4.147 9.748,4.154 9.757,4.163 C9.495,4.440 9.235,4.712 8.977,4.980 C8.720,5.248 8.462,5.518 8.205,5.790 C7.947,6.062 7.689,6.330 7.432,6.593 C7.174,6.856 6.919,7.122 6.666,7.390 C6.395,7.140 6.121,6.891 5.844,6.642 C5.568,6.392 5.285,6.143 4.994,5.894 C4.554,6.134 4.102,6.379 3.639,6.628 C3.175,6.877 2.709,7.131 2.241,7.390 C2.241,7.381 2.231,7.367 2.213,7.348 C2.475,7.071 2.735,6.796 2.992,6.524 C3.250,6.252 3.507,5.979 3.765,5.707 C4.023,5.435 4.280,5.165 4.538,4.897 C4.795,4.629 5.051,4.366 5.304,4.107 L5.304,4.107 L5.304,4.107 Z" fill="#fff"></path>
+      </svg>
+      </span>Chat với tui</a>
+      <a rel="nofollow" href="mailto:superufom@gmail.com" class="associate-mail">Email: superufom@gmail.com</a>
+      </div>
+    </div>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          var db = firebase.firestore();
+          db.collection("questions").get().then((querySnapshot) => {
+            render(querySnapshot.docs)
+          });
+            
+            var addBtnQuestion = document.getElementById('add-btn-question');
+            var delBtnQuestion = document.getElementById('delete-btn-question');
+            var newItemQuestion = document.getElementById("new-item-question"); 
+            var newItemOption1 = document.getElementById("new-item-option1"); 
+            var newItemOption2 = document.getElementById("new-item-option2");
+            var checkbox1 = document.getElementById("check1")
+            var checkbox2 = document.getElementById("check2") 
+            var start = document.getElementById('startBtn');
+
+            
+
+            addBtnQuestion.addEventListener('click', addItemQuestion);
+            delBtnQuestion.addEventListener('click', deleteQuestions);
+            start.addEventListener('click', startAnswers);
+            
+            function addItemQuestion() {
+                var newInput = newItemQuestion.value; 
+                var newInputoption1 = newItemOption1.value; 
+                var newInputoption2 = newItemOption2.value;
+                var answer1 = checkbox1.checked;
+                if (answer1 == true) {
+                  var answer = '1';
+                }
+                else {
+                  var answer = '2';
+                }
+                db.collection("questions").add({
+                  title: newInput,
+                  option1: newInputoption1,
+                  option2: newInputoption2,
+                  answer: answer
+                })
+                .catch(function(error) {
+                    console.error("Error adding document: ", error);
+                });       
+                db.collection("questions").get().then((querySnapshot) => {
+                  render(querySnapshot.docs)
+                });
+            }
+
+            function startAnswers() {
+              db.collection("questions").get().then((querySnapshot) => {
+                    renderAswer(querySnapshot.docs)
+              });
+            }
+
+            function renderAswer(items) {      
+                document.getElementById('questionScreen').style.display = "block";
+                document.getElementById('startBtn').style.display = "none";
+                document.getElementById('input-box').style.display = "none";    
+                var answerDivs = document.createElement("DIV");
+                var newDiv ='';
+
+                items.forEach((doc) => {
+                  newDiv +=
+                  '<div class="question"><div>Câu hỏi:</div>'+ doc.data().title + '</div>'
+                  +'<div class="answers">'
+                  +    '<div id="' + doc.id + '_answer_1" onclick="getResult(this.id,' + doc.data().answer + ',1)">' + doc.data().option1 + '</div>'
+                  +    '<div id="' + doc.id + '_answer_2" onclick="getResult(this.id,'+ doc.data().answer + ',2)">' + doc.data().option2 + '</div>'
+                  + '</div>';
+                  document.getElementById('questionScreen').innerHTML = newDiv;               
+                  });
+                
+            }
+          
+
+            function deleteQuestions() {
+              db.collection("questions").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                  db.collection("questions").doc(doc.id).delete();
+                });                         
+              });
+              db.collection("questions").get().then((querySnapshot) => {
+                  render(querySnapshot.docs)
+              });
+              
+            }
+
+            function render(items) {
+                newItemQuestion.value ='';
+                newItemOption1.value = '';
+                newItemOption2.value = '';
+                checkbox1.checked = false;
+                checkbox2.checked = false; 
+                document.getElementById('numQues').innerHTML = items.length;
+            }
+            
+            // function onClickAnswer(callback) {
+            //   document.getElementById('answers_1').addEventListener('click', () => callback(1))
+            //   document.getElementById('answers_2').addEventListener('click', () => callback(2))
+            // }
+
+            // function setSelectedAnswer(answer) {
+            //   let answerIndex =  answer + 1;
+            //   let answerDiv = document.getElementById('answers_' + answerIndex);
+            //   answerDiv.style.backgroundColor = '#ebebeb';
+            // }
+        } catch (e) {
+          console.error(e);
+        }
+
+      });
+    </script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/7.14.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="/__/firebase/7.14.0/firebase-analytics.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+  </body>
+</html>
